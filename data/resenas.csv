@@ -1,0 +1,8 @@
+id,usuario_id,restaurante_id,calificacion,titulo,comentario,fecha_resena,numero_visitas,recomendaria,fotos_resena,respuesta_restaurante,fecha_respuesta,estado
+1,1,1,5,Excelente experiencia,La comida estaba deliciosa y el servicio impecable. Volveré pronto.,2024-01-20,1,Sí,https://placeholder.com/photo1.jpg,Gracias por visitarnos Juan,2024-01-21,publicada
+2,2,2,4,Muy bueno pero caro,Sushi de calidad pero los precios son un poco altos. Aún así recomendable.,2024-01-21,2,Sí,https://placeholder.com/photo2.jpg,Apreciamos tu feedback María,2024-01-22,publicada
+3,3,3,5,¡Auténtico y delicioso!,Mejor comida mexicana que he probado en Madrid. Los tacos al pastor son increíbles.,2024-01-22,3,Sí,https://placeholder.com/photo3.jpg,¡Gracias Carlos!,2024-01-23,publicada
+4,4,4,5,Experiencia gastronómica de lujo,Ambiente elegante y comida exquisita. Perfecto para ocasiones especiales.,2024-01-23,1,Sí,https://placeholder.com/photo4.jpg,Esperamos verte pronto Ana,2024-01-24,publicada
+5,5,5,4,Tapas tradicionales de calidad,Buena variedad de tapas y vinos. Un poco ruidoso pero muy acogedor.,2024-01-24,4,Sí,https://placeholder.com/photo5.jpg,Gracias por tu reseña Pedro,2024-01-25,publicada
+6,1,3,4,Buena opción para comer rápido,Comida rápida pero sabrosa. Ideal para comer entre semana.,2024-01-25,2,Sí,,Sin respuesta,2024-01-26,publicada
+7,2,5,5,Descubrimiento del mes,Excelentes tapas y ambiente muy español. Perfecto para una noche con amigos.,2024-01-26,1,Sí,https://placeholder.com/photo6.jpg,¡Nos encanta tu entusiasmo!,2024-01-27,publicada

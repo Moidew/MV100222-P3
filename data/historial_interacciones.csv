@@ -1,0 +1,13 @@
+id,usuario_id,restaurante_id,tipo_interaccion,fecha_interaccion,duracion_visita_minutos,gasto_aproximado,metodo_pago,notas
+1,1,1,visita,2024-01-20,90,45,Tarjeta,Cena con pareja
+2,2,2,visita,2024-01-21,120,60,Tarjeta,Almuerzo de negocios
+3,3,3,visita,2024-01-22,75,30,Efectivo,Comida rápida
+4,4,4,visita,2024-01-23,150,90,Tarjeta,Cena especial
+5,5,5,visita,2024-01-24,60,25,Efectivo,Tapas y vino
+6,1,3,visita,2024-01-25,45,20,Tarjeta,Almuerzo
+7,2,5,visita,2024-01-26,90,35,Efectivo,Cena con amigos
+8,1,1,favorito,2024-01-27,,,,Agregado a favoritos
+9,3,2,favorito,2024-01-27,,,,Agregado a favoritos
+10,4,5,favorito,2024-01-28,,,,Agregado a favoritos
+11,1,2,busqueda,2024-01-28,,,,Búsqueda por categoría
+12,5,4,busqueda,2024-01-29,,,,Búsqueda por ubicación

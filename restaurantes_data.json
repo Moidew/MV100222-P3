@@ -1,0 +1,154 @@
+{
+  "restaurantes": [
+    {
+      "name": "Pupusería Doña María",
+      "category": "Salvadoreña",
+      "description": "Pupuserías tradicionales hechas a mano, especialidad en pupusas de chicharrón y queso",
+      "address": "Calle el Progreso #25, San Salvador",
+      "phone": "+503 2222-1111",
+      "rating": 4.5,
+      "priceRange": "$",
+      "location": {
+        "latitude": 13.6925,
+        "longitude": -89.2178
+      },
+      "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+      "hours": "Lun-Dom: 7:00 AM - 9:00 PM"
+    },
+    {
+      "name": "Cafetería Campus",
+      "category": "Café",
+      "description": "Café y snacks para estudiantes. Ambiente tranquilo ideal para estudiar",
+      "address": "Boulevard Constitución, San Salvador",
+      "phone": "+503 2222-2222",
+      "rating": 4.2,
+      "priceRange": "$",
+      "location": {
+        "latitude": 13.6932,
+        "longitude": -89.2185
+      },
+      "image": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800",
+      "hours": "Lun-Vie: 6:00 AM - 8:00 PM, Sáb: 7:00 AM - 3:00 PM"
+    },
+    {
+      "name": "Taquería El Mexicano",
+      "category": "Mexicana",
+      "description": "Tacos, burritos y quesadillas al estilo mexicano. Salsas picantes caseras",
+      "address": "Calle Arce, San Salvador",
+      "phone": "+503 2222-3333",
+      "rating": 4.6,
+      "priceRange": "$$",
+      "location": {
+        "latitude": 13.6921,
+        "longitude": -89.2190
+      },
+      "image": "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800",
+      "hours": "Lun-Dom: 11:00 AM - 10:00 PM"
+    },
+    {
+      "name": "Pollo Campero UFG",
+      "category": "Americana",
+      "description": "Pollo frito estilo campero, hamburguesas y alitas. Comida rápida de calidad",
+      "address": "Boulevard Constitución, San Salvador",
+      "phone": "+503 2222-4444",
+      "rating": 4.3,
+      "priceRange": "$$",
+      "location": {
+        "latitude": 13.6935,
+        "longitude": -89.2175
+      },
+      "image": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800",
+      "hours": "Lun-Dom: 10:00 AM - 10:00 PM"
+    },
+    {
+      "name": "Comedor Universitario",
+      "category": "Salvadoreña",
+      "description": "Comida casera salvadoreña. Platos típicos a buen precio para estudiantes",
+      "address": "Calle el Progreso, San Salvador",
+      "phone": "+503 2222-5555",
+      "rating": 4.0,
+      "priceRange": "$",
+      "location": {
+        "latitude": 13.6928,
+        "longitude": -89.2188
+      },
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+      "hours": "Lun-Vie: 7:00 AM - 7:00 PM"
+    },
+    {
+      "name": "Café Colonial",
+      "category": "Café",
+      "description": "Café artesanal en edificio colonial. Postres tradicionales y ambiente histórico",
+      "address": "Avenida Cuscatlán, Centro Histórico",
+      "phone": "+503 2333-1111",
+      "rating": 4.7,
+      "priceRange": "$$",
+      "location": {
+        "latitude": 13.6985,
+        "longitude": -89.1910
+      },
+      "image": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+      "hours": "Lun-Dom: 7:00 AM - 9:00 PM"
+    },
+    {
+      "name": "Restaurante La Catedral",
+      "category": "Salvadoreña",
+      "description": "Restaurante familiar frente a la catedral. Especialidad en platillos típicos",
+      "address": "Plaza Barrios, Centro Histórico",
+      "phone": "+503 2333-2222",
+      "rating": 4.4,
+      "priceRange": "$$",
+      "location": {
+        "latitude": 13.6992,
+        "longitude": -89.1918
+      },
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+      "hours": "Lun-Dom: 8:00 AM - 8:00 PM"
+    },
+    {
+      "name": "Pizzería Napolitana",
+      "category": "Italiana",
+      "description": "Pizzas al horno de leña. Recetas italianas auténticas en el centro",
+      "address": "Calle Delgado, Centro Histórico",
+      "phone": "+503 2333-3333",
+      "rating": 4.6,
+      "priceRange": "$$",
+      "location": {
+        "latitude": 13.6980,
+        "longitude": -89.1920
+      },
+      "image": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800",
+      "hours": "Mar-Dom: 12:00 PM - 10:00 PM"
+    },
+    {
+      "name": "Mercado Gastronómico",
+      "category": "Salvadoreña",
+      "description": "Variedad de pupuserías y comedores. Comida típica a bajo costo",
+      "address": "Mercado Central, Centro Histórico",
+      "phone": "+503 2333-4444",
+      "rating": 4.1,
+      "priceRange": "$",
+      "location": {
+        "latitude": 13.6995,
+        "longitude": -89.1908
+      },
+      "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+      "hours": "Lun-Sáb: 6:00 AM - 6:00 PM"
+    },
+    {
+      "name": "Sushi Bar Centro",
+      "category": "Japonesa",
+      "description": "Sushi y comida japonesa moderna. Rolls especiales y sashimi fresco",
+      "address": "Avenida España, Centro Histórico",
+      "phone": "+503 2333-5555",
+      "rating": 4.5,
+      "priceRange": "$$$",
+      "location": {
+        "latitude": 13.6987,
+        "longitude": -89.1912
+      },
+      "image": "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800",
+      "hours": "Mar-Dom: 12:00 PM - 9:00 PM"
+    }
+  ]
+}

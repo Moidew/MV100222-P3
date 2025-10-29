@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Lugares NightLife +18</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(255, 107, 53, 0.3);
+            border: 2px solid #FF6B35;
+        }
+        h1 {
+            color: #FFD700;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .age-warning {
+            background: #FF6B35;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        button {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .error {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .info {
+            background-color: #3498db;
+            color: white;
+        }
+        .log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #FF6B35;
+        }
+        .log-item {
+            padding: 5px;
+            margin: 5px 0;
+            border-left: 3px solid #FFD700;
+            padding-left: 10px;
+            color: #fff;
+        }
+        ul {
+            color: #ccc;
+        }
+        ul li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 NightLife Places +18</h1>
+
+        <div class="age-warning">
+            ⚠️ CONTENIDO PARA MAYORES DE 18 AÑOS
+        </div>
+
+        <p style="color: #ccc;">Este script agregará 15 lugares nocturnos premium a tu base de datos:</p>
+        <ul>
+            <li>🍺 5 Bares exclusivos</li>
+            <li>🎵 5 Clubs y Discotecas</li>
+            <li>🍸 3 Lounges VIP</li>
+            <li>💃 2 Strip Clubs</li>
+        </ul>
+
+        <button id="addButton" onclick="addPlaces()">Agregar Lugares NightLife</button>
+
+        <div id="status"></div>
+        <div id="log" class="log" style="display:none;"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZPITiMvi51L9QktYBTgsHh9itIee1r-s",
+            authDomain: "findspot-318f6.firebaseapp.com",
+            projectId: "findspot-318f6",
+            storageBucket: "findspot-318f6.firebasestorage.app",
+            messagingSenderId: "526159753501",
+            appId: "1:526159753501:web:6129e87f419cc5395bf1f4"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Datos de lugares nocturnos
+        const nightLifePlaces = [
+            // BARES (5)
+            {
+                name: "The Irish Pub",
+                category: "Bares",
+                description: "Auténtico pub irlandés en el corazón de San Benito. Más de 50 cervezas importadas de Irlanda, Escocia y Bélgica. Bandas de rock celta en vivo todos los viernes. Fish & chips tradicional y ambiente acogedor tipo Dublin",
+                address: "Zona Rosa, San Benito",
+                phone: "+503 2999-1111",
+                rating: 4.7,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.7025, longitude: -89.2355 },
+                image: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800",
+                hours: "Jue-Sáb: 6:00 PM - 2:00 AM",
+                features: ["Música en vivo", "Happy Hour", "Terraza"]
+            },
+            {
+                name: "Bar 503",
+                category: "Bares",
+                description: "Bar moderno y minimalista con coctelería molecular de autor. Bartenders certificados internacionalmente crean experiencias únicas con sabores locales e internacionales. DJ residentes los fines de semana. Terraza exclusiva con vista al Volcán de San Salvador",
+                address: "Colonia Escalón, San Salvador",
+                phone: "+503 2999-2222",
+                rating: 4.6,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.7010, longitude: -89.2300 },
+                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+                hours: "Mar-Sáb: 7:00 PM - 1:00 AM",
+                features: ["Coctelería premium", "DJ", "Área VIP"]
+            },
+            {
+                name: "La Cantina Rock",
+                category: "Bares",
+                description: "El templo del rock salvadoreño. Bandas locales e internacionales en vivo todos los viernes y sábados. Paredes decoradas con memorabilia de leyendas del rock. Karaoke rockanrolero los miércoles. Cerveza artesanal nacional y wings picantes",
+                address: "Boulevard de Los Héroes, San Salvador",
+                phone: "+503 2999-3333",
+                rating: 4.5,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.7000, longitude: -89.2180 },
+                image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800",
+                hours: "Mié-Dom: 6:00 PM - 12:00 AM",
+                features: ["Rock en vivo", "Karaoke", "Cerveza artesanal"]
+            },
+            {
+                name: "Sky Bar Rooftop",
+                category: "Bares",
+                description: "Bar en azotea con vista panorámica de la ciudad. Mixología de clase mundial y ambiente sofisticado bajo las estrellas",
+                address: "World Trade Center, San Salvador",
+                phone: "+503 2999-4444",
+                rating: 4.9,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.6890, longitude: -89.2450 },
+                image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+                hours: "Jue-Sáb: 8:00 PM - 2:00 AM",
+                features: ["Vista 360°", "Mixología", "Eventos privados"]
+            },
+            {
+                name: "Beer Station",
+                category: "Bares",
+                description: "Paraíso cervecero con más de 50 cervezas artesanales de todo el mundo. Menú de pub food gourmet con hamburguesas, alitas y tacos. Sports bar con pantallas gigantes para todos los partidos. Cerveza de barril rotativa con ediciones limitadas",
+                address: "Santa Tecla, La Libertad",
+                phone: "+503 2999-5555",
+                rating: 4.4,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.6760, longitude: -89.2790 },
+                image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=800",
+                hours: "Lun-Dom: 4:00 PM - 11:00 PM",
+                features: ["Cervezas artesanales", "Pub food", "Sports bar"]
+            },
+
+            // CLUBS Y DISCOS (5)
+            {
+                name: "Code Club",
+                category: "Clubs",
+                description: "El club electrónico más exclusivo de San Salvador. DJs internacionales reconocidos, sistema de sonido Funktion-One y espectáculos visuales impresionantes. Dress code estricto",
+                address: "Zona Rosa, San Benito",
+                phone: "+503 2888-1111",
+                rating: 4.8,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.7030, longitude: -89.2340 },
+                image: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
+                hours: "Vie-Sáb: 10:00 PM - 4:00 AM",
+                features: ["Electronic music", "VIP booths", "Laser show"]
+            },
+            {
+                name: "Vertigo Nightclub",
+                category: "Discos",
+                description: "La discoteca más grande de El Salvador con 3 pisos temáticos. Primer piso: Reggaeton y música urbana. Segundo piso: EDM y house. Tercer piso: Lounge VIP con música chill. Ladies night todos los jueves con tragos gratis hasta las 12 AM",
+                address: "Multiplaza, Antiguo Cuscatlán",
+                phone: "+503 2888-2222",
+                rating: 4.6,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.6750, longitude: -89.2470 },
+                image: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=800",
+                hours: "Jue-Sáb: 9:00 PM - 3:00 AM",
+                features: ["3 pisos", "Múltiples ambientes", "Ladies night"]
+            },
+            {
+                name: "La Oficina Club",
+                category: "Clubs",
+                description: "Club exclusivo para profesionales exitosos. After office todos los jueves con networking y cocteles premium. Ambiente sofisticado con dress code obligatorio. Música house y electrónica chill. Membresía VIP disponible",
+                address: "Colonia San Benito, San Salvador",
+                phone: "+503 2888-3333",
+                rating: 4.7,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.7035, longitude: -89.2350 },
+                image: "https://images.unsplash.com/photo-1543007631-283050bb3e8c?w=800",
+                hours: "Jue-Sáb: 7:00 PM - 2:00 AM",
+                features: ["After office", "Dress code", "Networking"]
+            },
+            {
+                name: "Bass Club",
+                category: "Discos",
+                description: "Templo del EDM y dubstep. Experiencia audiovisual inmersiva con pantallas LED gigantes, efectos criogénicos y los mejores DJs de la escena electrónica. Sesiones épicas hasta el amanecer",
+                address: "Centro Histórico, San Salvador",
+                phone: "+503 2888-4444",
+                rating: 4.5,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.6985, longitude: -89.1920 },
+                image: "https://images.unsplash.com/photo-1571266028243-d220c6ce8a50?w=800",
+                hours: "Vie-Sáb: 10:00 PM - 4:00 AM",
+                features: ["EDM", "LED walls", "Cryogenic effects"]
+            },
+            {
+                name: "Salsa y Sabor",
+                category: "Discos",
+                description: "El mejor lugar para bailar salsa, bachata y merengue en San Salvador. Clases gratis de salsa todos los miércoles a las 8 PM con instructores profesionales. Orquesta en vivo los sábados. Ambiente latino auténtico con pista de madera profesional",
+                address: "Paseo Escalón, San Salvador",
+                phone: "+503 2888-5555",
+                rating: 4.6,
+                priceRange: "$$",
+                ageRestriction: 18,
+                location: { latitude: 13.7015, longitude: -89.2295 },
+                image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+                hours: "Mié-Sáb: 8:00 PM - 2:00 AM",
+                features: ["Salsa", "Bachata", "Clases gratis"]
+            },
+
+            // LOUNGES (3)
+            {
+                name: "Velvet Lounge",
+                category: "Lounges",
+                description: "Lounge boutique ultra exclusivo con decoración de terciopelo rojo y negro. Más de 30 sabores de shisha premium importada. Coctelería molecular y vinos selectos. Música lounge y deep house. Reservaciones obligatorias",
+                address: "San Benito, San Salvador",
+                phone: "+503 2777-1111",
+                rating: 4.8,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.7040, longitude: -89.2345 },
+                image: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800",
+                hours: "Jue-Sáb: 7:00 PM - 1:00 AM",
+                features: ["Shisha bar", "Mixología", "Música chill"]
+            },
+            {
+                name: "Oro Lounge & Bar",
+                category: "Lounges",
+                description: "Lounge de lujo con detalles en oro y mármol. Jazz en vivo todos los miércoles con músicos internacionales. Carta de vinos con más de 200 etiquetas del mundo. Tapas españolas gourmet. Ambiente elegante para conversaciones íntimas",
+                address: "Colonia Escalón, San Salvador",
+                phone: "+503 2777-2222",
+                rating: 4.7,
+                priceRange: "$$$",
+                ageRestriction: 23,
+                location: { latitude: 13.7008, longitude: -89.2305 },
+                image: "https://images.unsplash.com/photo-1569949381669-ecf31ae8e613?w=800",
+                hours: "Mié-Sáb: 7:00 PM - 12:00 AM",
+                features: ["Jazz live", "Wine selection", "Tapas"]
+            },
+            {
+                name: "The Loft Lounge",
+                category: "Lounges",
+                description: "Lounge boutique estilo loft neoyorquino. DJ sets de deep house y nu-disco viernes y sábados. Craft cocktails con ingredientes frescos y locales. Sofás cómodos y luces tenues. Perfecto para grupos pequeños y citas románticas",
+                address: "Antiguo Cuscatlán",
+                phone: "+503 2777-3333",
+                rating: 4.6,
+                priceRange: "$$",
+                ageRestriction: 21,
+                location: { latitude: 13.6755, longitude: -89.2475 },
+                image: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800",
+                hours: "Vie-Sáb: 8:00 PM - 1:00 AM",
+                features: ["Ambiente íntimo", "DJ sets", "Craft cocktails"]
+            },
+
+            // STRIP CLUBS (2)
+            {
+                name: "Diamond Club",
+                category: "Strip Clubs",
+                description: "Cabaret de lujo estilo Las Vegas. Shows artísticos profesionales con bailarinas de nivel internacional. Salas VIP completamente privadas con servicio de botella premium. Iluminación de última generación y sonido envolvente. Ambiente sofisticado y discreto",
+                address: "Boulevard Constitución, San Salvador",
+                phone: "+503 2666-9999",
+                rating: 4.3,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.6950, longitude: -89.2200 },
+                image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800",
+                hours: "Mié-Sáb: 9:00 PM - 3:00 AM",
+                features: ["Shows profesionales", "VIP rooms", "Servicio de botella"]
+            },
+            {
+                name: "Platinum Gentleman's Club",
+                category: "Strip Clubs",
+                description: "El club de caballeros más elegante de Centroamérica. Shows artísticos de nivel internacional, champagne bar premium y salas VIP completamente privadas. Ambiente exclusivo, discreto y de clase mundial. Estacionamiento privado y seguridad 24/7",
+                address: "Zona Industrial, San Salvador",
+                phone: "+503 2666-8888",
+                rating: 4.2,
+                priceRange: "$$$",
+                ageRestriction: 21,
+                location: { latitude: 13.7100, longitude: -89.2100 },
+                image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+                hours: "Jue-Sáb: 8:00 PM - 2:00 AM",
+                features: ["Ambiente exclusivo", "Champagne bar", "Parking privado"]
+            }
+        ];
+
+        function addLog(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.style.display = 'block';
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.textContent = message;
+            logDiv.appendChild(logItem);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        window.addPlaces = async function() {
+            const button = document.getElementById('addButton');
+            const status = document.getElementById('status');
+            const logDiv = document.getElementById('log');
+
+            button.disabled = true;
+            button.textContent = 'Agregando lugares...';
+            status.style.display = 'block';
+            status.className = 'info';
+            status.textContent = 'Procesando lugares nocturnos...';
+            logDiv.innerHTML = '';
+
+            try {
+                let count = 0;
+                for (const place of nightLifePlaces) {
+                    addLog(`🔥 Agregando: ${place.name} (${place.category})...`);
+                    const docRef = await addDoc(collection(db, 'nightlife'), place);
+                    count++;
+                    addLog(`✅ ${place.name} agregado (ID: ${docRef.id})`);
+                }
+
+                status.className = 'success';
+                status.textContent = `🎉 ¡Éxito! ${count} lugares nocturnos agregados correctamente.`;
+                button.textContent = 'Lugares Agregados ✓';
+                addLog('');
+                addLog('🔥 ¡NightLife Mode activado! Ahora tienes 15 lugares premium +18');
+            } catch (error) {
+                status.className = 'error';
+                status.textContent = `❌ Error: ${error.message}`;
+                button.disabled = false;
+                button.textContent = 'Reintentar';
+                addLog(`❌ Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

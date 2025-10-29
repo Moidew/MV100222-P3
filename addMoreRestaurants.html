@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agregar Más Restaurantes a Firestore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #FF6B35;
+            text-align: center;
+        }
+        button {
+            background-color: #FF6B35;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #ff5722;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .log {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-item {
+            padding: 5px;
+            margin: 5px 0;
+            border-left: 3px solid #FF6B35;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍽️ Agregar Más Restaurantes</h1>
+        <p>Este script agregará 20 restaurantes más distribuidos por diferentes zonas de San Salvador:</p>
+        <ul>
+            <li>Santa Tecla</li>
+            <li>San Benito</li>
+            <li>Escalón</li>
+            <li>Multiplaza</li>
+            <li>Metrocentro</li>
+        </ul>
+
+        <button id="addButton" onclick="addRestaurants()">Agregar 20 Restaurantes Más</button>
+
+        <div id="status"></div>
+        <div id="log" class="log" style="display:none;"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js';
+
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZPITiMvi51L9QktYBTgsHh9itIee1r-s",
+            authDomain: "findspot-318f6.firebaseapp.com",
+            projectId: "findspot-318f6",
+            storageBucket: "findspot-318f6.firebasestorage.app",
+            messagingSenderId: "526159753501",
+            appId: "1:526159753501:web:6129e87f419cc5395bf1f4"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Datos de restaurantes adicionales
+        const restaurants = [
+            // Zona Santa Tecla (4 restaurantes)
+            {
+                name: "La Pampa Steakhouse",
+                category: "Americana",
+                description: "Carnes argentinas a la parrilla. Cortes premium y vinos importados",
+                address: "Paseo El Carmen, Santa Tecla",
+                phone: "+503 2444-1111",
+                rating: 4.8,
+                priceRange: "$$$",
+                location: { latitude: 13.6761, longitude: -89.2794 },
+                image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=800",
+                hours: "Mar-Dom: 12:00 PM - 10:00 PM"
+            },
+            {
+                name: "Pasta e Vino",
+                category: "Italiana",
+                description: "Auténtica cocina italiana. Pastas frescas hechas en casa",
+                address: "Colonia San José, Santa Tecla",
+                phone: "+503 2444-2222",
+                rating: 4.6,
+                priceRange: "$$",
+                location: { latitude: 13.6755, longitude: -89.2801 },
+                image: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800",
+                hours: "Lun-Sáb: 12:00 PM - 9:00 PM"
+            },
+            {
+                name: "Tacos y Más",
+                category: "Mexicana",
+                description: "Tacos al pastor, carne asada y mariscos. Auténtico sabor mexicano",
+                address: "Avenida El Boquerón, Santa Tecla",
+                phone: "+503 2444-3333",
+                rating: 4.4,
+                priceRange: "$$",
+                location: { latitude: 13.6768, longitude: -89.2788 },
+                image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=800",
+                hours: "Lun-Dom: 11:00 AM - 10:00 PM"
+            },
+            {
+                name: "Café Artesano",
+                category: "Café",
+                description: "Café de especialidad salvadoreño. Postres y desayunos",
+                address: "Paseo El Carmen, Santa Tecla",
+                phone: "+503 2444-4444",
+                rating: 4.7,
+                priceRange: "$",
+                location: { latitude: 13.6758, longitude: -89.2798 },
+                image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800",
+                hours: "Lun-Dom: 6:30 AM - 8:00 PM"
+            },
+
+            // Zona San Benito (4 restaurantes)
+            {
+                name: "Sushi Zen",
+                category: "Japonesa",
+                description: "Sushi bar premium. Rolls creativos y sashimi fresco",
+                address: "Boulevard del Hipódromo, San Benito",
+                phone: "+503 2555-1111",
+                rating: 4.9,
+                priceRange: "$$$",
+                location: { latitude: 13.7031, longitude: -89.2344 },
+                image: "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?w=800",
+                hours: "Mar-Dom: 12:00 PM - 10:00 PM"
+            },
+            {
+                name: "Tre Fratelli",
+                category: "Italiana",
+                description: "Pizza napoletana en horno de leña. Ambiente familiar",
+                address: "Colonia San Benito, San Salvador",
+                phone: "+503 2555-2222",
+                rating: 4.5,
+                priceRange: "$$",
+                location: { latitude: 13.7025, longitude: -89.2351 },
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800",
+                hours: "Lun-Dom: 11:30 AM - 10:00 PM"
+            },
+            {
+                name: "Pupusería El Comalito",
+                category: "Salvadoreña",
+                description: "Pupusas artesanales. Tradición familiar desde 1990",
+                address: "Avenida La Capilla, San Benito",
+                phone: "+503 2555-3333",
+                rating: 4.3,
+                priceRange: "$",
+                location: { latitude: 13.7038, longitude: -89.2338 },
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800",
+                hours: "Lun-Dom: 10:00 AM - 9:00 PM"
+            },
+            {
+                name: "Wings & Beer",
+                category: "Americana",
+                description: "Alitas picantes, hamburguesas gourmet y cervezas artesanales",
+                address: "Zona Rosa, San Benito",
+                phone: "+503 2555-4444",
+                rating: 4.4,
+                priceRange: "$$",
+                location: { latitude: 13.7044, longitude: -89.2332 },
+                image: "https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=800",
+                hours: "Lun-Dom: 12:00 PM - 11:00 PM"
+            },
+
+            // Zona Escalón (4 restaurantes)
+            {
+                name: "El Bodegón",
+                category: "Salvadoreña",
+                description: "Comida típica salvadoreña. Platillos tradicionales y caseros",
+                address: "Paseo General Escalón, San Salvador",
+                phone: "+503 2666-1111",
+                rating: 4.6,
+                priceRange: "$$",
+                location: { latitude: 13.7013, longitude: -89.2297 },
+                image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800",
+                hours: "Lun-Sáb: 11:00 AM - 9:00 PM"
+            },
+            {
+                name: "Café del Parque",
+                category: "Café",
+                description: "Café gourmet y brunch. Vista al parque, ambiente relajado",
+                address: "83 Avenida Sur, Escalón",
+                phone: "+503 2666-2222",
+                rating: 4.7,
+                priceRange: "$$",
+                location: { latitude: 13.7006, longitude: -89.2304 },
+                image: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=800",
+                hours: "Lun-Dom: 7:00 AM - 7:00 PM"
+            },
+            {
+                name: "Grill Master",
+                category: "Americana",
+                description: "Parrilladas, costillas BBQ y hamburguesas artesanales",
+                address: "Colonia Escalón, San Salvador",
+                phone: "+503 2666-3333",
+                rating: 4.5,
+                priceRange: "$$$",
+                location: { latitude: 13.7020, longitude: -89.2290 },
+                image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
+                hours: "Mar-Dom: 12:00 PM - 10:00 PM"
+            },
+            {
+                name: "Tokyo Ramen",
+                category: "Japonesa",
+                description: "Ramen auténtico japonés. Sopas calientes y gyozas",
+                address: "Paseo Escalón, San Salvador",
+                phone: "+503 2666-4444",
+                rating: 4.8,
+                priceRange: "$$",
+                location: { latitude: 13.6999, longitude: -89.2311 },
+                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=800",
+                hours: "Mar-Dom: 12:00 PM - 9:00 PM"
+            },
+
+            // Zona Multiplaza (4 restaurantes)
+            {
+                name: "La Cantina Mexicana",
+                category: "Mexicana",
+                description: "Comida mexicana auténtica. Fajitas, enchiladas y margaritas",
+                address: "Multiplaza, Antiguo Cuscatlán",
+                phone: "+503 2777-1111",
+                rating: 4.4,
+                priceRange: "$$",
+                location: { latitude: 13.6745, longitude: -89.2473 },
+                image: "https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=800",
+                hours: "Lun-Dom: 11:00 AM - 10:00 PM"
+            },
+            {
+                name: "Bella Italia",
+                category: "Italiana",
+                description: "Ristorante italiano. Pastas, risottos y tiramisú casero",
+                address: "Multiplaza, Antiguo Cuscatlán",
+                phone: "+503 2777-2222",
+                rating: 4.6,
+                priceRange: "$$",
+                location: { latitude: 13.6752, longitude: -89.2466 },
+                image: "https://images.unsplash.com/photo-1516685018646-549198525c1b?w=800",
+                hours: "Lun-Dom: 12:00 PM - 9:00 PM"
+            },
+            {
+                name: "Starbucks Reserve",
+                category: "Café",
+                description: "Café premium. Métodos especiales de preparación y postres",
+                address: "Multiplaza, Antiguo Cuscatlán",
+                phone: "+503 2777-3333",
+                rating: 4.5,
+                priceRange: "$$",
+                location: { latitude: 13.6738, longitude: -89.2480 },
+                image: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800",
+                hours: "Lun-Dom: 6:00 AM - 9:00 PM"
+            },
+            {
+                name: "Burger Joint",
+                category: "Americana",
+                description: "Hamburguesas gourmet. Carnes Angus y papas rústicas",
+                address: "Multiplaza, Antiguo Cuscatlán",
+                phone: "+503 2777-4444",
+                rating: 4.3,
+                priceRange: "$$",
+                location: { latitude: 13.6759, longitude: -89.2459 },
+                image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800",
+                hours: "Lun-Dom: 11:00 AM - 10:00 PM"
+            },
+
+            // Zona Metrocentro (4 restaurantes)
+            {
+                name: "Comedor Doña Elena",
+                category: "Salvadoreña",
+                description: "Comida salvadoreña casera. Platos del día económicos",
+                address: "Boulevard de Los Héroes, San Salvador",
+                phone: "+503 2888-1111",
+                rating: 4.2,
+                priceRange: "$",
+                location: { latitude: 13.7000, longitude: -89.2185 },
+                image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800",
+                hours: "Lun-Sáb: 7:00 AM - 6:00 PM"
+            },
+            {
+                name: "Sushi Express",
+                category: "Japonesa",
+                description: "Sushi para llevar. Combos económicos y rolls variados",
+                address: "Metrocentro, San Salvador",
+                phone: "+503 2888-2222",
+                rating: 4.1,
+                priceRange: "$",
+                location: { latitude: 13.6993, longitude: -89.2192 },
+                image: "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800",
+                hours: "Lun-Dom: 10:00 AM - 9:00 PM"
+            },
+            {
+                name: "Pizza Hut Boulevard",
+                category: "Italiana",
+                description: "Pizzas familiares y personales. Servicio a domicilio",
+                address: "Boulevard de Los Héroes, San Salvador",
+                phone: "+503 2888-3333",
+                rating: 4.0,
+                priceRange: "$$",
+                location: { latitude: 13.7007, longitude: -89.2178 },
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800",
+                hours: "Lun-Dom: 11:00 AM - 10:00 PM"
+            },
+            {
+                name: "Café Internet Plus",
+                category: "Café",
+                description: "Café y snacks. WiFi gratis, ideal para trabajar",
+                address: "Metrocentro, San Salvador",
+                phone: "+503 2888-4444",
+                rating: 3.9,
+                priceRange: "$",
+                location: { latitude: 13.6986, longitude: -89.2199 },
+                image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800",
+                hours: "Lun-Dom: 8:00 AM - 8:00 PM"
+            }
+        ];
+
+        function addLog(message) {
+            const logDiv = document.getElementById('log');
+            logDiv.style.display = 'block';
+            const logItem = document.createElement('div');
+            logItem.className = 'log-item';
+            logItem.textContent = message;
+            logDiv.appendChild(logItem);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        window.addRestaurants = async function() {
+            const button = document.getElementById('addButton');
+            const status = document.getElementById('status');
+            const logDiv = document.getElementById('log');
+
+            button.disabled = true;
+            button.textContent = 'Agregando restaurantes...';
+            status.style.display = 'block';
+            status.className = 'info';
+            status.textContent = 'Procesando...';
+            logDiv.innerHTML = '';
+
+            try {
+                let count = 0;
+                for (const restaurant of restaurants) {
+                    addLog(`Agregando: ${restaurant.name}...`);
+                    const docRef = await addDoc(collection(db, 'restaurantes'), restaurant);
+                    count++;
+                    addLog(`✅ ${restaurant.name} agregado (ID: ${docRef.id})`);
+                }
+
+                status.className = 'success';
+                status.textContent = `¡Éxito! ${count} restaurantes agregados correctamente.`;
+                button.textContent = 'Restaurantes Agregados ✓';
+                addLog('');
+                addLog('🎉 ¡Proceso completado! Total: 30 restaurantes en la BD');
+            } catch (error) {
+                status.className = 'error';
+                status.textContent = `Error: ${error.message}`;
+                button.disabled = false;
+                button.textContent = 'Reintentar';
+                addLog(`❌ Error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
