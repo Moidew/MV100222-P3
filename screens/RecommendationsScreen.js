@@ -1,7 +1,8 @@
-import { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Alert } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useFocusEffect } from "@react-navigation/native"
 import { PremiumContext } from "../context/PremiumContext"
 import { getAllRestaurants } from "../services/restaurantService"
 import { getNightLifePlaces } from "../services/nightLifeService"
@@ -15,10 +16,14 @@ export default function RecommendationsScreen({ navigation }) {
   const [userPreferences, setUserPreferences] = useState(["Italiana", "Japonesa", "Mexicana"])
   const [nightlifePreferences, setNightlifePreferences] = useState(["Clubs", "Bares", "Lounges"])
 
-  useEffect(() => {
-    loadUserPreferences()
-    loadNightlifePreferences()
-  }, [])
+  // Cargar preferencias cada vez que la pantalla se enfoca
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("🔄 RecommendationsScreen enfocada - Recargando preferencias...")
+      loadUserPreferences()
+      loadNightlifePreferences()
+    }, [])
+  )
 
   useEffect(() => {
     loadRecommendations()
@@ -45,6 +50,7 @@ export default function RecommendationsScreen({ navigation }) {
           }
           return categoryMap[id] || id
         })
+        console.log("✅ Preferencias de restaurantes cargadas:", capitalizedPreferences)
         setUserPreferences(capitalizedPreferences)
       }
     } catch (error) {
@@ -67,6 +73,7 @@ export default function RecommendationsScreen({ navigation }) {
           }
           return categoryMap[id] || id
         })
+        console.log("✅ Preferencias de NightLife cargadas:", capitalizedPreferences)
         setNightlifePreferences(capitalizedPreferences)
       }
     } catch (error) {
@@ -231,13 +238,19 @@ export default function RecommendationsScreen({ navigation }) {
           Analizando tus preferencias:
         </Text>
         <View style={styles.preferencesRow}>
-          {(mode === "nightlife" ? nightlifePreferences : userPreferences).map((pref, index) => (
-            <View key={index} style={[styles.preferenceTag, mode === "nightlife" && styles.preferenceTagDark]}>
-              <Text style={[styles.preferenceTagText, mode === "nightlife" && styles.preferenceTagTextDark]}>
-                {pref}
-              </Text>
-            </View>
-          ))}
+          {(mode === "nightlife" ? nightlifePreferences : userPreferences).length > 0 ? (
+            (mode === "nightlife" ? nightlifePreferences : userPreferences).map((pref, index) => (
+              <View key={index} style={[styles.preferenceTag, mode === "nightlife" && styles.preferenceTagDark]}>
+                <Text style={[styles.preferenceTagText, mode === "nightlife" && styles.preferenceTagTextDark]}>
+                  {pref}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noPreferencesText}>
+              No hay preferencias configuradas. Ve a tu perfil para seleccionarlas.
+            </Text>
+          )}
         </View>
       </View>
 
@@ -566,6 +579,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999",
     flex: 1,
+  },
+  noPreferencesText: {
+    fontSize: 13,
+    color: "#999",
+    fontStyle: "italic",
   },
   // Chat IA Button
   chatAIButton: {
