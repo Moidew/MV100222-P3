@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useContext } from "react"
+import React, { useState, useRef, useEffect, useContext } from "react"
 import {
   View,
   Text,
@@ -12,11 +12,15 @@ import {
   Alert,
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { useFocusEffect } from "@react-navigation/native"
 import { PremiumContext } from "../context/PremiumContext"
 import { chatWithAI } from "../services/aiChatService"
 
 export default function AIChatScreen({ navigation }) {
   const { isPremium } = useContext(PremiumContext)
+  const [userPreferences, setUserPreferences] = useState(["Italiana", "Japonesa", "Mexicana"])
+  const [nightlifePreferences, setNightlifePreferences] = useState(["Clubs", "Bares", "Lounges"])
 
   // Mensaje de bienvenida personalizado según Premium
   const welcomeMessage = isPremium
@@ -45,6 +49,14 @@ export default function AIChatScreen({ navigation }) {
     { id: 6, icon: "wine", text: "Noche elegante", query: "Una cena elegante y sofisticada" },
   ]
 
+  // Cargar preferencias cuando la pantalla se enfoca
+  useFocusEffect(
+    React.useCallback(() => {
+      loadUserPreferences()
+      loadNightlifePreferences()
+    }, [])
+  )
+
   useEffect(() => {
     // Auto-scroll al final cuando hay nuevos mensajes
     setTimeout(() => {
@@ -53,9 +65,63 @@ export default function AIChatScreen({ navigation }) {
   }, [messages])
 
   useEffect(() => {
-    // Debug: Verificar estado Premium
+    // Debug: Verificar estado Premium y preferencias
     console.log("🔍 AIChatScreen - Estado Premium:", isPremium)
-  }, [isPremium])
+    console.log("🔍 AIChatScreen - Preferencias restaurantes:", userPreferences)
+    console.log("🔍 AIChatScreen - Preferencias NightLife:", nightlifePreferences)
+  }, [isPremium, userPreferences, nightlifePreferences])
+
+  const loadUserPreferences = async () => {
+    try {
+      const saved = await AsyncStorage.getItem("userPreferences")
+      if (saved) {
+        const savedPreferences = JSON.parse(saved)
+        // Convertir IDs a nombres capitalizados para la IA
+        const capitalizedPreferences = savedPreferences.map((id) => {
+          const categoryMap = {
+            italiana: "Italiana",
+            japonesa: "Japonesa",
+            mexicana: "Mexicana",
+            salvadorena: "Salvadoreña",
+            cafe: "Café",
+            americana: "Americana",
+            china: "China",
+            india: "India",
+            francesa: "Francesa",
+            vegetariana: "Vegetariana",
+          }
+          return categoryMap[id] || id
+        })
+        setUserPreferences(capitalizedPreferences)
+        console.log("✅ Preferencias cargadas:", capitalizedPreferences)
+      }
+    } catch (error) {
+      console.error("Error cargando preferencias:", error)
+    }
+  }
+
+  const loadNightlifePreferences = async () => {
+    try {
+      const saved = await AsyncStorage.getItem("nightlifePreferences")
+      if (saved) {
+        const savedPreferences = JSON.parse(saved)
+        // Convertir IDs a nombres capitalizados para la IA
+        const capitalizedPreferences = savedPreferences.map((id) => {
+          const categoryMap = {
+            clubs: "Clubs",
+            bares: "Bares",
+            lounges: "Lounges",
+            discos: "Discos",
+          }
+          return categoryMap[id] || id
+        })
+        setNightlifePreferences(capitalizedPreferences)
+        console.log("✅ Preferencias NightLife cargadas:", capitalizedPreferences)
+      }
+    } catch (error) {
+      console.error("Error cargando preferencias de NightLife:", error)
+    }
+  }
 
   const handleSendMessage = async (messageText = inputText) => {
     if (!messageText.trim()) return
@@ -73,8 +139,8 @@ export default function AIChatScreen({ navigation }) {
     setIsTyping(true)
 
     try {
-      // Obtener respuesta de la IA
-      const aiResponse = await chatWithAI(messageText, messages, isPremium)
+      // Obtener respuesta de la IA (incluyendo preferencias del usuario)
+      const aiResponse = await chatWithAI(messageText, messages, isPremium, userPreferences, nightlifePreferences)
 
       // Agregar respuesta de la IA
       const aiMessage = {
@@ -207,6 +273,28 @@ export default function AIChatScreen({ navigation }) {
           <Ionicons name="trash-outline" size={20} color="#FFF" />
         </TouchableOpacity>
       </View>
+
+      {/* Preferencias activas */}
+      {userPreferences.length > 0 && (
+        <View style={styles.preferencesBar}>
+          <View style={styles.preferencesHeader}>
+            <Ionicons name="heart" size={14} color="#FF6B35" />
+            <Text style={styles.preferencesTitle}>Tus preferencias:</Text>
+          </View>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.preferencesScroll}>
+            {userPreferences.map((pref, index) => (
+              <View key={index} style={styles.preferenceChip}>
+                <Text style={styles.preferenceChipText}>{pref}</Text>
+              </View>
+            ))}
+            {isPremium && nightlifePreferences.map((pref, index) => (
+              <View key={`night-${index}`} style={styles.preferenceChipNight}>
+                <Text style={styles.preferenceChipTextNight}>{pref}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      )}
 
       {/* Chat Messages */}
       <ScrollView
@@ -567,5 +655,54 @@ const styles = StyleSheet.create({
     color: "#999",
     textAlign: "center",
     marginTop: 5,
+  },
+  preferencesBar: {
+    backgroundColor: "#FFF",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEE",
+  },
+  preferencesHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+    gap: 6,
+  },
+  preferencesTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
+  },
+  preferencesScroll: {
+    flexDirection: "row",
+  },
+  preferenceChip: {
+    backgroundColor: "#FFE8D6",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#FF6B35",
+  },
+  preferenceChipText: {
+    fontSize: 11,
+    fontWeight: "500",
+    color: "#FF6B35",
+  },
+  preferenceChipNight: {
+    backgroundColor: "#2a2a2a",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: "#FFD700",
+  },
+  preferenceChipTextNight: {
+    fontSize: 11,
+    fontWeight: "500",
+    color: "#FFD700",
   },
 })

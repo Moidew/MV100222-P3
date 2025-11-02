@@ -10,11 +10,15 @@ const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
  * @param {string} userMessage - Mensaje del usuario
  * @param {Array} conversationHistory - Historial de mensajes
  * @param {boolean} isPremium - Si el usuario tiene Premium
+ * @param {Array} userPreferences - Preferencias de categorías del usuario
+ * @param {Array} nightlifePreferences - Preferencias de NightLife del usuario
  * @returns {Object} { text: string, recommendations: Array }
  */
-export const chatWithAI = async (userMessage, conversationHistory = [], isPremium = false) => {
+export const chatWithAI = async (userMessage, conversationHistory = [], isPremium = false, userPreferences = [], nightlifePreferences = []) => {
   try {
     console.log("🤖 Chat IA - Estado Premium recibido:", isPremium)
+    console.log("🎯 Preferencias del usuario:", userPreferences)
+    console.log("🌙 Preferencias NightLife:", nightlifePreferences)
 
     // SIEMPRE cargar TODOS los lugares (restaurantes + nightlife)
     // La IA decidirá qué recomendar según el estado Premium
@@ -41,6 +45,15 @@ export const chatWithAI = async (userMessage, conversationHistory = [], isPremiu
     const regularPlaces = allPlaces.filter(p => !p.isNightLife)
     const nightlifePlacesList = allPlaces.filter(p => p.isNightLife)
 
+    // Preparar preferencias para el prompt
+    const preferencesText = userPreferences.length > 0
+      ? userPreferences.join(", ")
+      : "No especificadas"
+
+    const nightlifePreferencesText = nightlifePreferences.length > 0
+      ? nightlifePreferences.join(", ")
+      : "No especificadas"
+
     // Prompt del sistema - el cerebro del asistente
     const systemPrompt = `Eres un asistente gastronómico experto y amigable llamado "FindSpot AI".
 
@@ -54,6 +67,10 @@ TU CONOCIMIENTO:
 - Conoces ${allPlaces.length} lugares en San Salvador (${regularPlaces.length} restaurantes + ${nightlifePlacesList.length} NightLife +18)
 - ESTADO DEL USUARIO: ${isPremium ? '✨ PREMIUM - Acceso completo a TODOS los lugares' : '🔓 NORMAL - Solo acceso a restaurantes (NO NightLife +18)'}
 
+PREFERENCIAS DEL USUARIO:
+- 🍽️ Categorías favoritas de restaurantes: ${preferencesText}
+${isPremium ? `- 🌙 Categorías favoritas de NightLife: ${nightlifePreferencesText}` : ''}
+
 REGLAS IMPORTANTES SOBRE NIGHTLIFE +18:
 ${isPremium
   ? `- ✅ Este usuario ES PREMIUM: PUEDES recomendar libremente lugares NightLife +18 (bares, clubs, lounges)
@@ -66,9 +83,11 @@ ${isPremium
 CÓMO RESPONDES:
 1. Si el usuario hace una pregunta general → Responde amigablemente y pide más detalles
 2. Si el usuario da suficiente contexto → Recomienda 2-3 lugares ESPECÍFICOS
-3. SIEMPRE verifica si el lugar es NightLife antes de recomendarlo a usuarios no-Premium
-4. SIEMPRE sé específico con los nombres de restaurantes reales de la lista
-5. Incluye emojis relevantes pero no exageres
+3. PRIORITIZA lugares que coincidan con las preferencias del usuario cuando sea posible
+4. SIEMPRE verifica si el lugar es NightLife antes de recomendarlo a usuarios no-Premium
+5. SIEMPRE sé específico con los nombres de restaurantes reales de la lista
+6. Incluye emojis relevantes pero no exageres
+7. Si recomiendas algo fuera de sus preferencias habituales, explica por qué es una buena excepción
 
 CONTEXTO DE LA CONVERSACIÓN:
 ${conversationContext.map((msg) => `${msg.role}: ${msg.content}`).join("\n")}

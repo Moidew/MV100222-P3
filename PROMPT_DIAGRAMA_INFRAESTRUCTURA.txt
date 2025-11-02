@@ -1,0 +1,256 @@
+═══════════════════════════════════════════════════════════════════
+  PROMPT PARA GENERACIÓN DE DIAGRAMA DE INFRAESTRUCTURA
+  Aplicación: FindSpot - Asistente Gastronómico Inteligente
+═══════════════════════════════════════════════════════════════════
+
+INSTRUCCIONES PARA LA IA GENERADORA DE IMÁGENES:
+
+Crea un diagrama de arquitectura de software profesional y moderno que represente la infraestructura de la aplicación móvil "FindSpot". Debe ser técnico pero visualmente atractivo, con un estilo similar a los diagramas de arquitectura AWS o Azure.
+
+---
+
+ELEMENTOS A INCLUIR EN EL DIAGRAMA:
+
+1. CAPA DE CLIENTE (ARRIBA)
+   ┌─────────────────────────────────────┐
+   │  📱 DISPOSITIVOS MÓVILES            │
+   │  - iOS (iPhone/iPad)                │
+   │  - Android (Smartphones/Tablets)    │
+   │  - Web Browser (Responsive)         │
+   └─────────────────────────────────────┘
+
+2. CAPA DE APLICACIÓN (CENTRO)
+   ┌─────────────────────────────────────┐
+   │  ⚛️ REACT NATIVE + EXPO             │
+   │                                     │
+   │  Componentes:                       │
+   │  • Navigation (React Navigation)    │
+   │  • UI Components (Custom)           │
+   │  • State Management (Context API)   │
+   │  • HTTP Client (Axios)              │
+   └─────────────────────────────────────┘
+
+3. CAPA DE SERVICIOS EN LA NUBE (ABAJO)
+
+   A) FIREBASE (Backend as a Service)
+      ┌─────────────────────────────────┐
+      │  🔥 GOOGLE FIREBASE             │
+      │                                 │
+      │  • Authentication               │
+      │    - Email/Password             │
+      │    - Session Management         │
+      │                                 │
+      │  • Firestore Database           │
+      │    - users collection           │
+      │    - otp_codes collection       │
+      │    - password_resets collection │
+      │    - restaurants collection     │
+      │                                 │
+      │  • Real-time Listeners          │
+      └─────────────────────────────────┘
+
+   B) GROQ AI (Inteligencia Artificial)
+      ┌─────────────────────────────────┐
+      │  🤖 GROQ AI CLOUD               │
+      │                                 │
+      │  Modelo: Llama 3.3 70B          │
+      │  • Chat Completions API         │
+      │  • Natural Language Processing  │
+      │  • Context-Aware Recommendations│
+      │                                 │
+      │  Endpoint:                      │
+      │  api.groq.com/openai/v1/...    │
+      └─────────────────────────────────┘
+
+   C) EMAILJS (Servicio de Email)
+      ┌─────────────────────────────────┐
+      │  📧 EMAILJS                     │
+      │                                 │
+      │  • OTP Email Delivery           │
+      │  • Password Reset Emails        │
+      │  • Transactional Emails         │
+      └─────────────────────────────────┘
+
+   D) EXPO SERVICES
+      ┌─────────────────────────────────┐
+      │  🛠️ EXPO CLOUD                  │
+      │                                 │
+      │  • EAS Build (CI/CD)            │
+      │  • Over-the-Air Updates         │
+      │  • Push Notifications (futuro)  │
+      └─────────────────────────────────┘
+
+4. FLUJO DE DATOS (FLECHAS)
+
+   Usuario → React Native App
+   React Native App ↔️ Firebase (Auth + Data)
+   React Native App → Groq AI (Consultas IA)
+   React Native App → EmailJS (Envío OTP)
+   React Native App → Expo Services (Updates)
+
+5. CONTEXTOS DE LA APLICACIÓN (LATERAL DERECHO)
+   ┌─────────────────────────┐
+   │  📊 STATE MANAGEMENT   │
+   │                        │
+   │  • AuthContext         │
+   │    - user              │
+   │    - loading           │
+   │    - emailVerified     │
+   │                        │
+   │  • PremiumContext      │
+   │    - isPremium         │
+   │                        │
+   │  • ThemeContext        │
+   │    - theme colors      │
+   └─────────────────────────┘
+
+6. CARACTERÍSTICAS DE SEGURIDAD (LATERAL IZQUIERDO)
+   ┌─────────────────────────┐
+   │  🔒 SEGURIDAD          │
+   │                        │
+   │  • OTP Verification    │
+   │  • JWT Tokens          │
+   │  • HTTPS/TLS           │
+   │  • Environment Vars    │
+   │  • Firebase Rules      │
+   └─────────────────────────┘
+
+---
+
+ESPECIFICACIONES VISUALES:
+
+COLORES:
+- Cliente (móviles): Azul claro (#4A90E2)
+- React Native: Naranja/Coral (#FF6B35) [Color principal de FindSpot]
+- Firebase: Amarillo/Naranja (#FFCA28)
+- Groq AI: Púrpura/Morado (#8B5CF6)
+- EmailJS: Verde (#10B981)
+- Expo: Azul oscuro (#000020)
+- Flechas de datos: Gris oscuro (#374151)
+- Seguridad: Rojo (#EF4444)
+- State: Azul (#3B82F6)
+
+ESTILO:
+- Iconos modernos y minimalistas
+- Cajas con bordes redondeados (border-radius)
+- Sombras sutiles para dar profundidad
+- Flechas bidireccionales para comunicación
+- Flechas unidireccionales para flujo de datos
+- Fondo blanco o gris muy claro (#F9FAFB)
+
+TIPOGRAFÍA:
+- Títulos: Sans-serif, bold, tamaño grande
+- Subtítulos: Sans-serif, medium
+- Descripciones: Sans-serif, regular, tamaño pequeño
+
+DISPOSICIÓN:
+- Estructura de arriba hacia abajo (Top-Down)
+- Los dispositivos móviles en la parte superior
+- La aplicación React Native en el centro
+- Los servicios en la nube en la parte inferior
+- Elementos de seguridad y contexto en los laterales
+
+ELEMENTOS ADICIONALES:
+- Incluir pequeños iconos representativos:
+  * 📱 para móviles
+  * ⚛️ para React
+  * 🔥 para Firebase
+  * 🤖 para IA
+  * 📧 para email
+  * 🔒 para seguridad
+  * 🛠️ para Expo
+
+- Incluir etiquetas de protocolo en las flechas:
+  * "REST API" para conexiones HTTP
+  * "WebSocket" para Firestore real-time
+  * "HTTPS" para conexiones seguras
+
+- Añadir una leyenda en la esquina inferior derecha:
+  ┌─────────────────────┐
+  │  LEYENDA           │
+  │  ━━━> Datos        │
+  │  ←──> Bidireccional│
+  │  ···> Opcional     │
+  └─────────────────────┘
+
+---
+
+TEXTO A INCLUIR EN EL DIAGRAMA:
+
+TÍTULO PRINCIPAL (arriba):
+"ARQUITECTURA DE INFRAESTRUCTURA - FindSpot"
+"Aplicación Móvil con Inteligencia Artificial"
+
+SUBTÍTULO:
+"Stack: React Native + Firebase + Groq AI + Expo"
+
+PIE DE PÁGINA (abajo):
+"Versión 1.0 | Universidad Francisco Gavidia | 2025"
+"Hosting: Expo Go | Backend: Firebase | IA: Groq Llama 3.3 70B"
+
+---
+
+INFORMACIÓN TÉCNICA ADICIONAL A MOSTRAR:
+
+En la sección de Firebase:
+• "Authentication: Email/Password + OTP"
+• "Database: Firestore NoSQL"
+• "Real-time: Cloud Firestore Listeners"
+
+En la sección de Groq AI:
+• "Model: Llama 3.3 70B Versatile"
+• "Temperature: 0.8"
+• "Max Tokens: 800"
+• "Latency: 3-5 segundos"
+
+En la sección de React Native:
+• "Framework: React Native 0.81.5"
+• "SDK: Expo 54"
+• "Navigation: React Navigation 6.x"
+• "HTTP: Axios"
+
+---
+
+EJEMPLO DE ESTRUCTURA VISUAL:
+
+                    ┌─────────────────────────┐
+                    │   📱 DISPOSITIVOS       │
+                    │   iOS | Android | Web   │
+                    └───────────┬─────────────┘
+                                │
+                                ▼
+                    ┌─────────────────────────┐
+    ┌────────────┐  │   ⚛️ REACT NATIVE      │  ┌──────────┐
+    │ 🔒         │◄─┤      + EXPO            │─►│ 📊       │
+    │ SEGURIDAD  │  │                        │  │ STATE    │
+    │            │  │  - Navigation          │  │ MGMT     │
+    └────────────┘  │  - UI Components       │  └──────────┘
+                    │  - Context API         │
+                    └───────────┬─────────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            │                   │                   │
+            ▼                   ▼                   ▼
+    ┌──────────────┐    ┌──────────────┐   ┌──────────────┐
+    │ 🔥 FIREBASE  │    │ 🤖 GROQ AI   │   │ 📧 EMAILJS   │
+    │              │    │              │   │              │
+    │ Auth + DB    │    │ Llama 3.3    │   │ OTP Emails   │
+    └──────────────┘    └──────────────┘   └──────────────┘
+
+---
+
+FORMATO DE SALIDA DESEADO:
+
+- Imagen PNG de alta resolución (mínimo 2000x1500 px)
+- Orientación: Horizontal (Landscape)
+- Estilo: Profesional, limpio, estilo "diagrama de arquitectura cloud"
+- Similar a: Diagramas de AWS Architecture, Azure Architecture, o GCP Architecture
+
+---
+
+NOTA IMPORTANTE:
+Este diagrama será utilizado en una presentación académica y documentación de proyecto. Debe verse profesional y técnicamente preciso, pero también accesible para personas no técnicas.
+
+═══════════════════════════════════════════════════════════════════
+FIN DEL PROMPT
+═══════════════════════════════════════════════════════════════════

@@ -195,3 +195,113 @@ export const forceVerifyUser = async (email) => {
     throw error
   }
 }
+
+// 🔥 FIREBASE AUTH - Restablecer contraseña (crear nueva cuenta temporal)
+export const resetPassword = async (email, newPassword) => {
+  try {
+    console.log(`🔄 Preparando reset de contraseña para: ${email}`)
+
+    // Buscar usuario en Firestore para validar que existe
+    const usersSnapshot = await db.collection("users").where("email", "==", email).get()
+
+    if (usersSnapshot.empty) {
+      throw new Error("user-not-found")
+    }
+
+    const userDoc = usersSnapshot.docs[0]
+    const userId = userDoc.id
+    const userData = userDoc.data()
+
+    // Guardar datos importantes del usuario antes de eliminarlo
+    const userBackup = {
+      email: userData.email,
+      emailVerified: userData.emailVerified,
+      isPremium: userData.isPremium,
+      createdAt: userData.createdAt,
+      preferences: userData.preferences || [],
+    }
+
+    console.log(`💾 Backup de datos del usuario creado`)
+
+    // Guardar el backup y la nueva contraseña
+    await db.collection("password_resets").doc(email).set({
+      newPassword: newPassword,
+      userId: userId,
+      userBackup: userBackup,
+      createdAt: new Date(),
+      readyToApply: true,
+    })
+
+    console.log(`✅ Reset de contraseña preparado. El usuario puede iniciar sesión con la nueva contraseña.`)
+
+    return {
+      success: true,
+      message: "Contraseña restablecida exitosamente",
+    }
+  } catch (error) {
+    console.error("❌ Error restableciendo contraseña:", error)
+    throw error
+  }
+}
+
+// 🔥 FIREBASE AUTH - Aplicar reset de contraseña al hacer login
+export const applyPasswordReset = async (email, password) => {
+  try {
+    console.log(`🔍 Verificando si hay reset de contraseña para: ${email}`)
+
+    const resetDoc = await db.collection("password_resets").doc(email).get()
+
+    if (!resetDoc.exists || !resetDoc.data().readyToApply) {
+      console.log("⚠️ No hay reset pendiente")
+      return null
+    }
+
+    const resetData = resetDoc.data()
+
+    // Verificar si la contraseña ingresada es la nueva contraseña
+    if (password !== resetData.newPassword) {
+      console.log("⚠️ La contraseña ingresada no coincide con la nueva contraseña del reset")
+      return null
+    }
+
+    console.log(`🔄 Aplicando reset de contraseña...`)
+
+    // Obtener el usuario de Firebase Auth
+    const currentUser = auth.currentUser
+
+    if (currentUser) {
+      // Si ya está autenticado (no debería pasar), actualizar contraseña
+      await currentUser.updatePassword(resetData.newPassword)
+    }
+
+    // Restaurar datos del usuario en Firestore
+    if (resetData.userBackup) {
+      const usersSnapshot = await db.collection("users").where("email", "==", email).get()
+      if (!usersSnapshot.empty) {
+        const userId = usersSnapshot.docs[0].id
+        await db.collection("users").doc(userId).update({
+          emailVerified: resetData.userBackup.emailVerified,
+          isPremium: resetData.userBackup.isPremium,
+          preferences: resetData.userBackup.preferences || [],
+        })
+      }
+    }
+
+    // Marcar como aplicado
+    await db.collection("password_resets").doc(email).update({
+      readyToApply: false,
+      applied: true,
+      appliedAt: new Date(),
+    })
+
+    console.log(`✅ Reset de contraseña aplicado exitosamente`)
+
+    return {
+      success: true,
+      message: "Contraseña actualizada correctamente",
+    }
+  } catch (error) {
+    console.error("❌ Error aplicando reset:", error)
+    return null
+  }
+}

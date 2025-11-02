@@ -13,6 +13,9 @@ import { db } from "./services/firebaseConfig"
 import LoginScreen from "./screens/LoginScreen"
 import RegisterScreen from "./screens/RegisterScreen"
 import OTPVerificationScreen from "./screens/OTPVerificationScreen"
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen"
+import ResetPasswordOTPScreen from "./screens/ResetPasswordOTPScreen"
+import NewPasswordScreen from "./screens/NewPasswordScreen"
 import MapScreen from "./screens/MapScreen"
 import NightModeScreen from "./screens/NightModeScreen"
 import RestaurantDetailScreen from "./screens/RestaurantDetailScreen"
@@ -35,6 +38,9 @@ function AuthStack() {
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="ResetPasswordOTP" component={ResetPasswordOTPScreen} />
+      <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
     </Stack.Navigator>
   )
 }

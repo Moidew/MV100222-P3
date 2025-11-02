@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native"
-import { loginUser } from "../services/authService"
+import { loginUser, applyPasswordReset } from "../services/authService"
+import { db, auth } from "../services/firebaseConfig"
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("")
@@ -34,9 +35,44 @@ export default function LoginScreen({ navigation }) {
 
     setLoading(true)
     try {
-      await loginUser(email, password)
-      // El AuthContext manejará automáticamente la navegación
-      Alert.alert("Éxito", "Bienvenido a FindSpot")
+      // Intentar login normal primero
+      console.log("🔐 Intentando inicio de sesión...")
+      const userCredential = await auth.signInWithEmailAndPassword(email, password)
+      const user = userCredential.user
+
+      console.log("✅ Login exitoso, verificando reset de contraseña...")
+
+      // Después de login exitoso, verificar si hay un reset pendiente
+      const resetDoc = await db.collection("password_resets").doc(email).get()
+
+      if (resetDoc.exists && !resetDoc.data().applied) {
+        const resetData = resetDoc.data()
+        console.log("🔄 Aplicando reset de contraseña pendiente...")
+
+        try {
+          // Actualizar a la nueva contraseña
+          await user.updatePassword(resetData.tempPassword)
+
+          // Marcar como aplicado
+          await db.collection("password_resets").doc(email).update({
+            applied: true,
+          })
+
+          console.log("✅ Contraseña actualizada exitosamente")
+
+          Alert.alert(
+            "✅ Contraseña Actualizada",
+            "Tu contraseña ha sido restablecida exitosamente.\n\nA partir de ahora, usa tu NUEVA contraseña para iniciar sesión.",
+            [{ text: "Entendido" }]
+          )
+        } catch (updateError) {
+          console.error("❌ Error actualizando contraseña:", updateError)
+          // No bloquear el login si falla la actualización
+          Alert.alert("Éxito", "Bienvenido a FindSpot")
+        }
+      } else {
+        Alert.alert("Éxito", "Bienvenido a FindSpot")
+      }
     } catch (error) {
       let errorMessage = "No se pudo iniciar sesión"
 
@@ -87,6 +123,10 @@ export default function LoginScreen({ navigation }) {
           disabled={loading}
         >
           <Text style={styles.buttonText}>{loading ? "Iniciando sesión..." : "Iniciar Sesión"}</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")} style={styles.forgotPassword}>
+          <Text style={styles.forgotPasswordText}>¿Olvidaste tu contraseña?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
@@ -149,5 +189,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 15,
     fontSize: 14,
+  },
+  forgotPassword: {
+    marginTop: 15,
+    alignItems: "center",
+  },
+  forgotPasswordText: {
+    color: "#999",
+    fontSize: 14,
+    textDecorationLine: "underline",
   },
 })
